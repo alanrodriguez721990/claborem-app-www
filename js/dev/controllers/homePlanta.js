@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('myApp.home', [])
-.controller('homeCtrl',
+angular.module('myApp.homePlanta', [])
+.controller('homePlantaCtrl',
     ['$scope', '$rootScope', 'ApiHttpSrv', 'ConfigSrv', '$location', 'AuthSrv', 'RedirectSrv',
     function($scope, $rootScope, ApiHttpSrv, ConfigSrv, $location, AuthSrv, RedirectSrv) {
 
@@ -12,12 +12,6 @@ angular.module('myApp.home', [])
             var getDataSuccess = function(data){
                 // console.log(data[0]);
                 $rootScope.data = data[0];
-                $rootScope.plantas = $rootScope.data.plantas;
-
-                if(!$rootScope.currentId) { // si ya estaba seteado previamente, agarro esa planta
-                    $rootScope.currentId = 0
-                }
-                $rootScope.plant = $rootScope.data.plantas[$rootScope.currentId];
                 $rootScope.collections = {};
 
                 $scope.loading = false;
@@ -30,11 +24,7 @@ angular.module('myApp.home', [])
             };
             $scope.loading = true;
             $scope.disconnect = false;
-            if(AuthSrv.currentUser().type === 'contratista'){
-                ApiHttpSrv.createApiHttp('post', ConfigSrv.getApiUrl('home'), data, data).success(getDataSuccess).error(getDataFail);
-            }else{
-                ApiHttpSrv.createApiHttp('post', ConfigSrv.getApiUrl('homePlanta'), data, data).success(getDataSuccess).error(getDataFail);
-            }
+            ApiHttpSrv.createApiHttp('post', ConfigSrv.getApiUrl('homePlanta'), data, data).success(getDataSuccess).error(getDataFail);
         }
         if (AuthSrv.initialState() || !AuthSrv.authorized()) {
             $location.path('/login');
